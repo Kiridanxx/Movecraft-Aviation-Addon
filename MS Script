@@ -1,0 +1,26 @@
+package net.countercraft.movecraft.commands;
+
+import net.countercraft.movecraft.craft.PilotedCraft;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class TakeoffScuttleHandler {
+
+    private final JavaPlugin plugin;
+
+    public TakeoffScuttleHandler(JavaPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public void handleTakeoffScuttle(PilotedCraft pilotedCraft) {
+        if (pilotedCraft.getCruiseSpeed() < pilotedCraft.getCraftType().getMinTakeoffSpeed()) {
+            if (pilotedCraft.isInAir()) {
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    pilotedCraft.getAudience().sendMessage("Craft scuttled due to insufficient speed for takeoff.");
+                    // Add your scuttling logic here
+                    // Example: CraftManager.getInstance().remove(pilotedCraft);
+                });
+            }
+        }
+    }
+}
